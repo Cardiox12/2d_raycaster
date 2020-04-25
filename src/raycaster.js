@@ -1,21 +1,28 @@
 class Raycaster {
-	constructor(fov) {
+	constructor(fov, n) {
 		this.FACTOR = 100;
+		this.n = n;
 		this.fov = fov;
 		this.pos = createVector(mouseX, mouseY);
 		this.STEP = 5;
 		
-		this.rays = [
-			new Ray(this.pos.x, this.pos.y, createVector(1, 0), this.FACTOR),
-			new Ray(this.pos.x, this.pos.y, createVector(1, 0), this.FACTOR)
-		];
-		
-		this.rays[0].rotate(this.fov / 2, false);
-		this.rays[1].rotate(this.fov / 2, true);
+		this.rays = [];
+
+		let acc = 0;
+		for (let i = 0 ; i < n ; i++)
+		{
+			this.rays = [...this.rays, new Ray(this.pos.x, this.pos.y, createVector(1, 0), this.FACTOR)];
+			this.rays[i].rotate(acc, true);
+
+			acc += this.fov / n;
+		}
+
+		for (const r of this.rays)
+			r.rotate(this.fov / 2, false);
 	}
 	
-	update() {
-		this.pos = createVector(mouseX, mouseY);
+	update(x, y) {
+		this.pos = createVector(x, y);
 		
 		for (const r of this.rays){
 			r.update(this.pos);
@@ -61,19 +68,24 @@ class Raycaster {
 				r.resize(record);
 			}
 			else
-				r.resize(this.FACTOR);
+			{
+				if (DEBUG)
+					r.extend();
+				else
+					r.resize(this.FACTOR);
+			}
 		}
 	}
 	
-	rotateClockwise() {
+	rotateClockwise(angle) {
 		for (const r of this.rays){
-			r.rotate(this.STEP, true);
+			r.rotate(angle, true);
 		}
 	}
 	
-	rotateAnticlockwise() {
+	rotateAnticlockwise(angle) {
 		for (const r of this.rays){
-			r.rotate(this.STEP, false);
+			r.rotate(angle, false);
 		}
 	}
 	
@@ -81,7 +93,9 @@ class Raycaster {
 		const den = (v1.x - v2.x) * (v3.y - v4.y) - (v1.y - v2.y) * (v3.x - v4.x);
 		
 		if (den === null)
-		return (null);
+		{
+			return (null);
+		}
 		const t = ((v1.x - v3.x) * (v3.y - v4.y) - (v1.y - v3.y) * (v3.x - v4.x)) / den;
 		const u = -((v1.x - v2.x) * (v1.y - v3.y) - (v1.y - v2.y) * (v1.x - v3.x)) / den;
 		
