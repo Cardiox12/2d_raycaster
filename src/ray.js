@@ -21,6 +21,10 @@ class Ray {
 		this.dir = v;
 	}
 	
+	resize(height){
+		this.height = height;
+	}
+
 	update(pos){
 		this.pos = pos;
 	}

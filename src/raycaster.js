@@ -31,17 +31,37 @@ class Raycaster {
 			r.draw();
 		}
 	}
+
+	cast(walls){
+		let p = null;
+		let dist = null;
+		let closest;
+		let record;
 		
-	collide(walls) {
-		for (let i = 0 ; i < this.rays.length ; i++){
+		for (const r of this.rays){
+			closest = null;
+			record = Infinity;
+
 			for (const w of walls) {
-				const p = Raycaster.intersect(this.rays[i].pos, this.rays[i].getProj(), w.p1, w.p2);
-				
+				p = Raycaster.intersect(r.pos, r.getProj(), w.p1, w.p2);	
 				if (p != null)
 				{
-					ellipse(p.x, p.y, 10, 10);
+					dist = p5.Vector.dist(p, this.pos);
+					
+					if (dist < record)
+					{
+						record = dist;
+						closest = p;
+					}
 				}
 			}
+			if (closest != null)
+			{
+				ellipse(closest.x, closest.y, 10, 10);
+				r.resize(record);
+			}
+			else
+				r.resize(this.FACTOR);
 		}
 	}
 	

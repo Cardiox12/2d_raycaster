@@ -4,7 +4,7 @@ const CLOCKWISE = true;
 const FACTOR = 100;
 const FOV = 66;
 const STEP = 5;
-const WALLS_NUMBER = 5;
+const WALLS_NUMBER = 1;
 const events = {}
 let walls = null;
 let raycaster = null;
@@ -24,7 +24,7 @@ function draw() {
   raycaster.update();
   raycaster.draw();
   walls.draw();
-  raycaster.collide(walls.walls);
+  raycaster.cast(walls.walls)
 }
 
 function checkEvent() {
