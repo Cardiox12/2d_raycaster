@@ -27,28 +27,20 @@ function draw() {
 	background(220);
 	checkEvent();
 
-	raycaster.update(noise(xoff) * width, noise(yoff) * height);
-	xoff += 0.001;
-	yoff += 0.001;
+	// raycaster.update(noise(xoff) * width, noise(yoff) * height);
+	raycaster.update(mouseX, mouseY);
+	// xoff += 0.001;
+	// yoff += 0.001;
 	raycaster.draw();
 	walls.draw();
 	raycaster.cast(walls.walls)
-
-	const prob = noise(alpha_off) * 1;
-
-	print(prob)
-	if (prob >= 0.5)
-		raycaster.rotateClockwise(prob);
-	else if (prob <= 0.5)
-		raycaster.rotateAnticlockwise(prob)
-	alpha_off += 0.001;
 }
 
 function checkEvent() {
   if (events[KEY_A]) {
-    raycaster.rotateAnticlockwise(angle);
+    raycaster.rotateAnticlockwise(1);
   } else if (events[KEY_D]) {
-    raycaster.rotateClockwise(angle);
+    raycaster.rotateClockwise(1);
   }
 }
 

@@ -22,11 +22,11 @@ class Ray {
 	}
 
 	extend(){
-		const proj = p5.Vector.mult(this.dir, this.height + 10);
+		const proj = p5.Vector.mult(this.dir, this.height);
 
 		proj.add(this.pos);
 		if (proj.x >= 0 && proj.x <= width && proj.y >= 0 && proj.y <= height)
-			this.height += 10;
+			this.height++;
 	}
 	
 	resize(height){
