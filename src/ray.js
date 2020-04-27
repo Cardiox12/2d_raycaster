@@ -3,30 +3,38 @@ class Ray {
 		this.pos = createVector(x1, y1);
 		this.dir = dir;
 		this.height = height;
+		this.step = 2;
+		this.heading = 0;
 	}
 
 	rotate(theta, clockwise){
 		const v = createVector(0, 0);
-
+		
 		if (clockwise)
 		{
+			this.heading = (this.heading + theta) % 360;
 			v.x = cos(theta) * this.dir.x - sin(theta) * this.dir.y;
 			v.y = sin(theta) * this.dir.x + cos(theta) * this.dir.y;
 		} 
 		else 
 		{
+			this.heading = (this.heading - theta) % 360;
 			v.x = cos(theta) * this.dir.x + sin(theta) * this.dir.y;
 			v.y = -sin(theta) * this.dir.x + cos(theta) * this.dir.y;
 		}
 		this.dir = v;
 	}
 
+	getAngle(){
+		return (this.heading);
+	}
+
 	extend(){
-		const proj = p5.Vector.mult(this.dir, this.height);
+		const proj = p5.Vector.mult(this.dir, this.height + this.step);
 
 		proj.add(this.pos);
-		if (proj.x >= 0 && proj.x <= width && proj.y >= 0 && proj.y <= height)
-			this.height++;
+		this.height += this.step;
+		this.resize(this.height);
 	}
 	
 	resize(height){

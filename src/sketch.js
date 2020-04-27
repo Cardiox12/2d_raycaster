@@ -2,10 +2,10 @@ const KEY_A = 65;
 const KEY_D = 68;
 const CLOCKWISE = true;
 const FACTOR = 100;
-const FOV = 70;
+const FOV = 66;
 const STEP = 5;
 const WALLS_NUMBER = 10;
-const RAYS = 80;
+const RAYS = 1;
 const events = {}
 const DEBUG = true;
 let walls = null;
@@ -19,7 +19,22 @@ function setup() {
 
   angleMode(DEGREES);
 
-  walls = new Walls(WALLS_NUMBER);
+  walls = new Walls(0);
+
+  let b1 = createVector(width / 2, 0);
+  let b2 = createVector(width / 2, height);
+  walls.add(new Wall(b1, b2));
+
+  b1 = createVector(0, 0);
+  b2 = createVector(width / 2, 0);
+  walls.add(new Wall(b1, b2));
+
+  b2 = createVector(0, height);
+  walls.add(new Wall(b1, b2));
+
+  b1 = createVector(0, height);
+  b2 = createVector(width / 2, height);
+  walls.add(new Wall(b1, b2));
   raycaster = new Raycaster(FOV, RAYS);
 }
 
@@ -27,13 +42,13 @@ function draw() {
 	background(220);
 	checkEvent();
 
-	// raycaster.update(noise(xoff) * width, noise(yoff) * height);
 	raycaster.update(mouseX, mouseY);
+	// raycaster.update(noise(xoff) * width / 2, noise(yoff) * height);
+	raycaster.cast(walls.walls)
+	walls.draw();
+
 	// xoff += 0.001;
 	// yoff += 0.001;
-	raycaster.draw();
-	walls.draw();
-	raycaster.cast(walls.walls)
 }
 
 function checkEvent() {
